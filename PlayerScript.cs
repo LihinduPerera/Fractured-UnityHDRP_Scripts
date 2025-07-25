@@ -14,6 +14,8 @@ public class PlayerScript : AnimationBrain
 
     [Header("Player Script Cameras")]
     public Transform playerCamera;
+    public float mouseSensitivity = 100f;
+    private float xRotation = 0f;
 
     [Header("Player Animator and Gravity")]
     public CharacterController cController;
@@ -36,7 +38,6 @@ public class PlayerScript : AnimationBrain
     private const int LOWERBODY = 1;
 
     bool isSprinting;
-
     private Vector3 direction;
 
     private void Start()
@@ -60,6 +61,7 @@ public class PlayerScript : AnimationBrain
         velocity.y += gravity * Time.deltaTime;
         cController.Move(velocity * Time.deltaTime);
 
+        HandleMouseLook();
         PlayerMove();
         Jump();
         Sprint();
@@ -68,38 +70,52 @@ public class PlayerScript : AnimationBrain
         CheckBottomAnimation();
     }
 
+    void HandleMouseLook()
+    {
+        if (Input.GetMouseButton(1)) // Right-click to aim/rotate
+        {
+            float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+            float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+
+            // Rotate player horizontally
+            transform.Rotate(Vector3.up * mouseX);
+
+            // Tilt camera vertically (clamped)
+            xRotation -= mouseY;
+            xRotation = Mathf.Clamp(xRotation, -45f, 45f);
+            playerCamera.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        }
+    }
+
     void PlayerMove()
     {
         float horizontal_axis = 0f;
         float vertical_axis = 0f;
 
         if (Input.GetKey(KeyCode.A))
-        {
             horizontal_axis = -1f;
-        }
         else if (Input.GetKey(KeyCode.D))
-        {
             horizontal_axis = 1f;
-        }
 
         if (Input.GetKey(KeyCode.W))
-        {
             vertical_axis = 1f;
-        }
         else if (Input.GetKey(KeyCode.S))
-        {
             vertical_axis = -1f;
-        }
 
         direction = new Vector3(horizontal_axis, 0f, vertical_axis).normalized;
 
-        if (direction.magnitude >= 0.1f)
+        if (direction.magnitude >= 0.1f && !Input.GetMouseButton(1)) // Prevent auto-rotation during aiming
         {
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + playerCamera.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnCalVelocity, turnCalTime);
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+            cController.Move(moveDirection.normalized * playerSpeed * Time.deltaTime);
+        }
+        else if (direction.magnitude >= 0.1f && Input.GetMouseButton(1)) // Move in direction player is facing
+        {
+            Vector3 moveDirection = transform.forward * direction.z + transform.right * direction.x;
             cController.Move(moveDirection.normalized * playerSpeed * Time.deltaTime);
         }
     }
@@ -110,52 +126,31 @@ public class PlayerScript : AnimationBrain
         {
             velocity.y = Mathf.Sqrt(jumpRange * -2 * gravity);
         }
-        else
-        {
-
-        }
     }
 
     void Sprint()
     {
-        if ((Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.D)) && onSurface)
+        if ((Input.GetKey(KeyCode.LeftShift) && direction.magnitude >= 0.1f) && onSurface)
         {
             isSprinting = true;
             gravity = -1000f;
 
-            float horizontal_axis = 0f;
-            float vertical_axis = 0f;
-
-            if (Input.GetKey(KeyCode.A))
-            {
-                horizontal_axis = -1f;
-            }
-            else if (Input.GetKey(KeyCode.D))
-            {
-                horizontal_axis = 1f;
-            }
-
-            if (Input.GetKey(KeyCode.W))
-            {
-                vertical_axis = 1f;
-            }
-            else if (Input.GetKey(KeyCode.S))
-            {
-                vertical_axis = -1f;
-            }
-
-            direction = new Vector3(horizontal_axis, 0f, vertical_axis).normalized;
-
-            if (direction.magnitude >= 0.1f)
+            Vector3 moveDirection;
+            if (!Input.GetMouseButton(1))
             {
                 float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + playerCamera.eulerAngles.y;
                 float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnCalVelocity, turnCalTime);
                 transform.rotation = Quaternion.Euler(0f, angle, 0f);
-
-                Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-                cController.Move(moveDirection.normalized * playerSprint * Time.deltaTime);
+                moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             }
-        } else
+            else
+            {
+                moveDirection = transform.forward * direction.z + transform.right * direction.x;
+            }
+
+            cController.Move(moveDirection.normalized * playerSprint * Time.deltaTime);
+        }
+        else
         {
             isSprinting = false;
             gravity = -30f;
@@ -177,6 +172,7 @@ public class PlayerScript : AnimationBrain
         Cursor.lockState = CursorLockMode.None;
         Object.Destroy(gameObject, 1.0f);
     }
+
     private void CheckTopAnimation()
     {
         CheckMovementAnimation(UPPERBODY);
@@ -193,11 +189,11 @@ public class PlayerScript : AnimationBrain
         {
             Play(Animations.Jump, layer, false, false);
         }
-        else if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(KeyCode.LeftShift) && direction.magnitude > 0.1f)
         {
             Play(Animations.Run, layer, false, false);
         }
-        else if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.S))
+        else if (direction.magnitude > 0.1f)
         {
             Play(Animations.Walk, layer, false, false);
         }
