@@ -130,7 +130,7 @@ public class PlayerScript : AnimationBrain
 
     void Sprint()
     {
-        if ((Input.GetKey(KeyCode.LeftShift) && direction.magnitude >= 0.1f) && onSurface)
+        if ((Input.GetKey(KeyCode.LeftShift) && direction.magnitude >= 0.1f) && onSurface && !Input.GetMouseButton(1))
         {
             isSprinting = true;
             gravity = -1000f;
@@ -189,7 +189,7 @@ public class PlayerScript : AnimationBrain
         {
             Play(Animations.Jump, layer, false, false);
         }
-        else if (Input.GetKey(KeyCode.LeftShift) && direction.magnitude > 0.1f)
+        else if (Input.GetKey(KeyCode.LeftShift) && !Input.GetMouseButton(1) && direction.magnitude > 0.1f)
         {
             Play(Animations.Run, layer, false, false);
         }
