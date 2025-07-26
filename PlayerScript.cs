@@ -13,7 +13,8 @@ public class PlayerScript : AnimationBrain
     public float presentHealth;
 
     [Header("Player Script Cameras")]
-    public Transform playerCamera;
+    public Transform playerCamera; // Main camera transform
+    public Cinemachine.CinemachineVirtualCamera aimCamera; // Reference to aim camera
     public float mouseSensitivity = 100f;
     private float xRotation = 0f;
 
@@ -37,7 +38,6 @@ public class PlayerScript : AnimationBrain
 
     private string currentAnimation = "";
 
-
     private const int UPPERBODY = 0;
     private const int LOWERBODY = 1;
 
@@ -48,7 +48,6 @@ public class PlayerScript : AnimationBrain
     {
         Initialize(GetComponent<Animator>().layerCount, Animations.Idle1, GetComponent<Animator>(), DefaultAnimation);
         animator = GetComponent<Animator>();
-
 
         Cursor.lockState = CursorLockMode.Locked;
         presentHealth = playerHealth;
@@ -82,8 +81,25 @@ public class PlayerScript : AnimationBrain
             float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
             float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
-            // Rotate player horizontally
-            transform.Rotate(Vector3.up * mouseX);
+            // Rotate player based on aim camera's rotation
+            if (aimCamera != null)
+            {
+                // Get the aim camera's forward direction (ignoring pitch)
+                Vector3 cameraForward = aimCamera.transform.forward;
+                cameraForward.y = 0;
+                cameraForward.Normalize();
+
+                // Set player rotation to match aim camera's horizontal rotation
+                if (cameraForward != Vector3.zero)
+                {
+                    transform.forward = cameraForward;
+                }
+            }
+            else
+            {
+                // Fallback to regular rotation if aim camera is not assigned
+                transform.Rotate(Vector3.up * mouseX);
+            }
 
             // Tilt camera vertically (clamped)
             xRotation -= mouseY;
@@ -118,7 +134,7 @@ public class PlayerScript : AnimationBrain
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             cController.Move(moveDirection.normalized * playerSpeed * Time.deltaTime);
         }
-        else if (direction.magnitude >= 0.1f && Input.GetMouseButton(1)) // Move in direction player is facing
+        else if (direction.magnitude >= 0.1f && Input.GetMouseButton(1)) // Move in direction player is facing (now synced with aim camera)
         {
             Vector3 moveDirection = transform.forward * direction.z + transform.right * direction.x;
             cController.Move(moveDirection.normalized * playerSpeed * Time.deltaTime);
