@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class SwitchCamera : MonoBehaviour
 {
@@ -10,45 +11,81 @@ public class SwitchCamera : MonoBehaviour
     public GameObject tpcam;
     public GameObject tpCanvas;
 
-    //[Header("Camera Animator")]
-    //public Animator animator;
+    [Header("Camera Shake Settings")]
+    public float shakeAmplitude = 1.2f; // How much the camera shakes
+    public float shakeFrequency = 2.0f; // How quickly the camera shakes
+    public float shakeDuration = 0.15f; // How long the shake lasts
+
+    private CinemachineVirtualCamera currentVCam;
+    private CinemachineBasicMultiChannelPerlin currentNoise;
+    private float shakeElapsedTime = 0f;
+
+    private void Start()
+    {
+        // Initialize with TP camera as default
+        currentVCam = tpcam.GetComponent<CinemachineVirtualCamera>();
+        currentNoise = currentVCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+    }
 
     private void Update()
     {
-        if (Input.GetMouseButton(1) && Input.GetKey(KeyCode.W))
+        if (Input.GetMouseButton(1))
         {
-            //animator.SetBool("Idle", false);
-            //animator.SetBool("IdleAim", true);
-            //animator.SetBool("RifleWalk", true);
-            //animator.SetBool("Walk", true);
-
-            tpcam.SetActive(false);
-            tpCanvas.SetActive(false);
-            aimCam.SetActive(true);
-            aimCanvas.SetActive(true);
-
-        } else if (Input.GetMouseButton(1))
+            SwitchToAimCamera();
+        }
+        else
         {
-            //animator.SetBool("Idle", false);
-            //animator.SetBool("IdleAim", true);
-            //animator.SetBool("RifleWalk", false);
-            //animator.SetBool("Walk", false);
+            SwitchToTPCamera();
+        }
 
-            tpcam.SetActive(false);
-            tpCanvas.SetActive(false);
-            aimCam.SetActive(true);
-            aimCanvas.SetActive(true);
-
-        } else
+        // Handle camera shake
+        if (shakeElapsedTime > 0)
         {
-            //animator.SetBool("Idle", true);
-            //animator.SetBool("IdleAim", false);
-            //animator.SetBool("RifleWalk", false);
+            shakeElapsedTime -= Time.deltaTime;
 
-            tpcam.SetActive(true);
-            tpCanvas.SetActive(true);
-            aimCam.SetActive(false);
-            aimCanvas.SetActive(false);
+            if (shakeElapsedTime <= 0f)
+            {
+                // Reset to default values when shake is complete
+                if (currentNoise != null)
+                {
+                    currentNoise.m_AmplitudeGain = 0f;
+                    currentNoise.m_FrequencyGain = 0f;
+                }
+            }
+        }
+    }
+
+    private void SwitchToAimCamera()
+    {
+        tpcam.SetActive(false);
+        tpCanvas.SetActive(false);
+        aimCam.SetActive(true);
+        aimCanvas.SetActive(true);
+
+        // Update current camera references
+        currentVCam = aimCam.GetComponent<CinemachineVirtualCamera>();
+        currentNoise = currentVCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+    }
+
+    private void SwitchToTPCamera()
+    {
+        tpcam.SetActive(true);
+        tpCanvas.SetActive(true);
+        aimCam.SetActive(false);
+        aimCanvas.SetActive(false);
+
+        // Update current camera references
+        currentVCam = tpcam.GetComponent<CinemachineVirtualCamera>();
+        currentNoise = currentVCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+    }
+
+    public void TriggerShake()
+    {
+        if (currentNoise != null)
+        {
+            shakeElapsedTime = shakeDuration;
+            currentNoise.m_AmplitudeGain = shakeAmplitude;
+            currentNoise.m_FrequencyGain = shakeFrequency;
         }
     }
 }

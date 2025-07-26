@@ -15,7 +15,11 @@ public class AnimationBrain : MonoBehaviour
         Animator.StringToHash("Jump"),
         Animator.StringToHash("Fight"),
         Animator.StringToHash("Dance 1"),
-        Animator.StringToHash("Death")
+        Animator.StringToHash("Death"),
+        Animator.StringToHash("StandRifleAim"),
+        Animator.StringToHash("WalkRifleAim"),
+        Animator.StringToHash("StandRifleFire"),
+        Animator.StringToHash("WalkRifleFire")
     };
 
     private Animator animator;
@@ -102,5 +106,9 @@ public enum Animations
     Fight,
     Dance1,
     Death,
+    StandRifleAim,
+    WalkRifleAim,
+    StandRifleFire,
+    WalkRifleFire,
     None
 }

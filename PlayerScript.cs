@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,7 +32,11 @@ public class PlayerScript : AnimationBrain
     public float surfaceDistance = 0.4f;
     public LayerMask surfaceMask;
 
+    [Header("Camera Shake")]
+    public SwitchCamera switchCamera;
+
     private string currentAnimation = "";
+
 
     private const int UPPERBODY = 0;
     private const int LOWERBODY = 1;
@@ -44,6 +48,7 @@ public class PlayerScript : AnimationBrain
     {
         Initialize(GetComponent<Animator>().layerCount, Animations.Idle1, GetComponent<Animator>(), DefaultAnimation);
         animator = GetComponent<Animator>();
+
 
         Cursor.lockState = CursorLockMode.Locked;
         presentHealth = playerHealth;
@@ -175,7 +180,9 @@ public class PlayerScript : AnimationBrain
 
     private void CheckTopAnimation()
     {
-        CheckMovementAnimation(UPPERBODY);
+        {
+            CheckMovementAnimation(UPPERBODY);
+        }
     }
 
     private void CheckBottomAnimation()
@@ -188,6 +195,24 @@ public class PlayerScript : AnimationBrain
         if (!onSurface)
         {
             Play(Animations.Jump, layer, false, false);
+        }
+        else if (Input.GetMouseButton(1) && Input.GetMouseButton(0) && direction.magnitude > 0.1f)
+        {
+            Play(Animations.WalkRifleFire, layer, false, false);
+            if (switchCamera != null) switchCamera.TriggerShake();
+        }
+        else if (Input.GetMouseButton(1) && direction.magnitude > 0.1f)
+        {
+            Play(Animations.WalkRifleAim, layer, false, false);
+        }
+        else if (Input.GetMouseButton(1) && Input.GetMouseButton(0))
+        {
+            Play(Animations.StandRifleFire, layer, false, false);
+            if (switchCamera != null) switchCamera.TriggerShake();
+        }
+        else if (Input.GetMouseButton(1))
+        {
+            Play(Animations.StandRifleAim, layer, false, false);
         }
         else if (Input.GetKey(KeyCode.LeftShift) && !Input.GetMouseButton(1) && direction.magnitude > 0.1f)
         {
