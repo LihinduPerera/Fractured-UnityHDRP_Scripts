@@ -1,0 +1,357 @@
+fileFormatVersion: 2
+guid: 149bbd40e6a697447aa19274495c30d9
+ModelImporter:
+  serializedVersion: 21300
+  internalIDToNameTable: []
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelBackpack2_Material003
+    second: {fileID: 2100000, guid: ad4f9251d4135b2439a93c17c814eb60, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelBackpack3_Material004
+    second: {fileID: 2100000, guid: f9bce5a33484f8d4698a01d0f5ec9a99, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelBackpack4_Material005
+    second: {fileID: 2100000, guid: 715014eadd2bda04f8492c9c49dae963, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelBackpack_Eagle_Material001
+    second: {fileID: 2100000, guid: eff64c55f80125d45a4d8077aa913a1a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelBackpack_Material006
+    second: {fileID: 2100000, guid: ab7db9d1bd9d663408c69ad3bb90e0e9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelBackpack_Rocket_Material00
+    second: {fileID: 2100000, guid: 64887279f60d9ac45be471f2c50481fb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelBrows_Material007
+    second: {fileID: 2100000, guid: 01e8d9fbbe1c18945b190a1915369e00, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelEyes_Material008
+    second: {fileID: 2100000, guid: 80c8c220f9001e74eb1c2af06db43fb7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelGlovesL_Material009
+    second: {fileID: 2100000, guid: a20f91ac4637e1b489ac271fdb1173c6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelGlovesR_Material010
+    second: {fileID: 2100000, guid: 3f663259921bf9945a5a3f61cca00cb1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelHair_fly2_Material011
+    second: {fileID: 2100000, guid: 706c0c00b1e954340a60c4319d01dec1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelHair_fly_Material012
+    second: {fileID: 2100000, guid: 3483293b9e9f5b244b2a5a1dce3f3a86, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelHair_thick2_Material013
+    second: {fileID: 2100000, guid: 54d37e874c81a214d8540f905326974e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelHair_thick3_Material014
+    second: {fileID: 2100000, guid: 04b77a38b47629a4ba6325b382245931, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelHair_thick_Material015
+    second: {fileID: 2100000, guid: 04e9d3f992c3f014cb31534841eaedb6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelHair_thin2_Material016
+    second: {fileID: 2100000, guid: b40611a5211f7054ea9354ddd7bd87fe, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelHair_thin3_Material017
+    second: {fileID: 2100000, guid: f0a8adabccd01e447b37c5890376becd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelHair_thin4_Material018
+    second: {fileID: 2100000, guid: 084f2c70004422c4cbf8383bbb5aff81, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelHair_thin_Material019
+    second: {fileID: 2100000, guid: a5cdc43da1014cb40802ac1bbd2847e4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelHead2_Material020
+    second: {fileID: 2100000, guid: 1bf78ef9d84bcce48b8766e84fbf8aed, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelHead_Material021
+    second: {fileID: 2100000, guid: c261dc1a11809aa48b82b71a6e2ddba8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelHoodie_Material022
+    second: {fileID: 2100000, guid: 644cea308e3f7f743aa3fe3a9d98b15b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelInner_Material023
+    second: {fileID: 2100000, guid: d21b602228d052c42bdf2abb4c3041c4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelJacket2_Material024
+    second: {fileID: 2100000, guid: ba1695db19f975241865623add79fb94, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelJacket3_Material025
+    second: {fileID: 2100000, guid: 06e62b55fd57ede48bd4526f15c904ed, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelJacket4_Material026
+    second: {fileID: 2100000, guid: 86f227e524cf62d409ab9e33072dd348, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelJacket_Material027
+    second: {fileID: 2100000, guid: aa1296f5b8de3de40adf62634f2f71e0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelLashes_Material028
+    second: {fileID: 2100000, guid: edfb6fd80c0f1e441908bb58c0d985ed, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelMouth_Material029
+    second: {fileID: 2100000, guid: 2e27578fca1539b4da905f74615b5263, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelPants_Material030
+    second: {fileID: 2100000, guid: a2c1d108d5c67bc4bbdbb8372a918ca8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelShoes_Material031
+    second: {fileID: 2100000, guid: 6a7257c413e33cc4792cf7f912e53ea2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ModelTears_Material032
+    second: {fileID: 2100000, guid: 19eab25b58d121f45bec9aefc985629e, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ellie-backpack-acces-color
+    second: {fileID: 2800000, guid: 57373e57a7115cf4bb1fa45c6d5d7e67, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ellie-backpack-color
+    second: {fileID: 2800000, guid: b7d04853a09c8824785ac532b747918f, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ellie-backpack-velcro-color
+    second: {fileID: 2800000, guid: e17bfdaa17282b14384e11a1a516c29c, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ellie-brows-color2
+    second: {fileID: 2800000, guid: 58c421d5284b3eb4290933a01c816160, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ellie-caruncle-color
+    second: {fileID: 2800000, guid: 89834c0662e802046b00dcab9a036ff8, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ellie-festival-boots-color
+    second: {fileID: 2800000, guid: 06a090de11ddee640b604b81c045186b, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ellie-hair-flying-color
+    second: {fileID: 2800000, guid: 44660400144aa964d8d8fad893185858, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ellie-hair-thick-color
+    second: {fileID: 2800000, guid: 29b808a04a777da44a200da463f25749, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ellie-hair-thin-color
+    second: {fileID: 2800000, guid: 51c1566904b90f846929a14e9fb96afa, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ellie-head-color
+    second: {fileID: 2800000, guid: 415c4a4692d69fc438bc806cc027c6a0, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ellie-patrol-gloves-color_test
+    second: {fileID: 2800000, guid: e8896bb4103fd1842995ca7baeffacc5, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ellie-patrol-hoodie-up-color_test
+    second: {fileID: 2800000, guid: b954c12ff6d9dcf49b89e9b000b701f9, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ellie-patrol-jacket-color_test
+    second: {fileID: 2800000, guid: 93db3108bfa1def48bc9bb7fcf9e9378, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ellie-patrol-pants-color_test
+    second: {fileID: 2800000, guid: 552f769e26fd1684f80ce665b7684810, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ellie-shirt-skein-color
+    second: {fileID: 2800000, guid: 2ddd5e64de858a64aaf1a8f79faed32a, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ellie-teeth-color
+    second: {fileID: 2800000, guid: 3a51fcf003f32cb428cd4e4b7ed63c7c, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: eye-01-static_mat_color
+    second: {fileID: 2800000, guid: cfb4c952e7e947c439f68c8c7af29e5d, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: tear-mask
+    second: {fileID: 2800000, guid: 69b5a968ef7fa4f4fadc56eb467cafca, type: 3}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 1
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

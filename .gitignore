@@ -98,4 +98,10 @@ InitTestScene*.unity*
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 
-/Assets/
+/Assets/ALP_Assets
+/Assets/DreamTree2
+/Assets/GameAssets
+/Assets/NewPunch
+/Assets/TerrainDemoScene_HDRP
+/Assets/Trees Collection Asset PBR
+/Assets/TutorialInfo

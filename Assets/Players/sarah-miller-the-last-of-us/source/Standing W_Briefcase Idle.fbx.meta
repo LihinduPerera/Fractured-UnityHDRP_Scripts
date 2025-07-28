@@ -1,0 +1,227 @@
+fileFormatVersion: 2
+guid: 6286861026d366d4e9e29f4a9475e182
+ModelImporter:
+  serializedVersion: 21300
+  internalIDToNameTable: []
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_0-ellie-hands-singleplayer-color - DXT1.png
+    second: {fileID: 2100000, guid: aa45bd0c62459294ca49622a6e0943b5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_1-fma-shirt-sarah-wrinkle-neutral-color - DXT1.png
+    second: {fileID: 2100000, guid: 3e31997ef5202c946a51276de27f9e05, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_10-sarah-eyes-color - DXT1.png
+    second: {fileID: 2100000, guid: e48551226e1e4fc4a94c798502020cdc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_11-sarah-hair-color-hires - DXT1.png
+    second: {fileID: 2100000, guid: 0ad8d2d7749d34347b96231f6f9b0238, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_12-sarah-bracelets-necklace-color - DXT1.png
+    second: {fileID: 2100000, guid: 445de664520fc7b4aa45e2b67192392e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_2-fma-pants-sarah-color - DXT1.png
+    second: {fileID: 2100000, guid: cad61a9bc75ec434085582ebd02836c1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_3-fma-shirt-sarah-wrinkle-neutral-color - DXT1.png
+    second: {fileID: 2100000, guid: 4abf70ab4c502a24d8e7ace093f5f28c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_4-fma-sarah-feet-color - DXT1.png
+    second: {fileID: 2100000, guid: 0afd9707301f9e743a4a3bd264921db5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_5-sarah-arm-hires-color - DXT1.png
+    second: {fileID: 2100000, guid: aa72079566863ca43a032bb5a89cb21f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_6-sarah-bracelets-necklace-color - DXT1.png
+    second: {fileID: 2100000, guid: 2ee49b5f2c568214b8a3517c6ddfb2f7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_7-sarah-head-fma2-color - DXT1.png
+    second: {fileID: 2100000, guid: d9e038918456eca4b8f136ca81e8bdc6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_8-sarah-eyeoverlay-color - DXT1.png
+    second: {fileID: 2100000, guid: 9ea641ebf7b8ea84c9f5223509d2274a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_9-sarah-eyelashes-color - DXT1.png
+    second: {fileID: 2100000, guid: db2fc0c856ea5144486f9a90dd5ff43f, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ellie-hands-singleplayer-color - DXT1
+    second: {fileID: 2800000, guid: 5594adae1c6900d4a9a569e91bca1efa, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: fma-pants-sarah-color - DXT1
+    second: {fileID: 2800000, guid: 2de55bfe8e004e143b6d3590a1fb217d, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: fma-sarah-feet-color - DXT1
+    second: {fileID: 2800000, guid: 7b98a6e7b6ce34a4ebb94d2df8529a07, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: fma-shirt-sarah-wrinkle-neutral-color - DXT1
+    second: {fileID: 2800000, guid: 85737d77f7c52064b82e47cb8416bb18, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: sarah-arm-hires-color - DXT1
+    second: {fileID: 2800000, guid: ac2664f04ec42e646b3779aa1743f2f0, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: sarah-bracelets-necklace-color - DXT1
+    second: {fileID: 2800000, guid: 994758c959b635b4ea863f07d78a25a4, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: sarah-eyelashes-color - DXT1
+    second: {fileID: 2800000, guid: cb03272228ce62f45af61a602b483a96, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: sarah-eyeoverlay-color - DXT1
+    second: {fileID: 2800000, guid: e5102f9cbb68103449dad4799cdc1fc7, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: sarah-eyes-color - DXT1
+    second: {fileID: 2800000, guid: 4cd5cff86e493b545bb2eb5088bd9435, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: sarah-hair-color-hires - DXT1
+    second: {fileID: 2800000, guid: 44f0083e5e9ca104cab081de669c19a4, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: sarah-head-fma2-color - DXT1
+    second: {fileID: 2800000, guid: 47d725390fa6d3f4385ae53038b78376, type: 3}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 1
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
