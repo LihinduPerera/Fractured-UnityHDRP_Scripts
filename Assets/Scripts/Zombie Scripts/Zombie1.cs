@@ -23,13 +23,14 @@ public class Zombie1 : ZombieAnimationBrain
     public GameObject[] walkPoints;
     int currentZombiePosition = 0;
     public float zombieSpeed;
-    public float rotationSpeed = 5f; // Added rotation speed parameter
+    public float rotationSpeed = 5f;
     float walkingPointRadius = 2;
+    private float idleAnimationTimer = 0f;
+    private float idleAnimationInterval = 5f; // Time between idle animation switches
 
     [Header("Zombie Attacking Var")]
     public float timeBtwAttack;
     bool previouslyAttack;
-    bool isAttacking;
 
     [Header("Zombie Animations")]
     public Animator animator;
@@ -62,9 +63,30 @@ public class Zombie1 : ZombieAnimationBrain
         if (playerInVisionRadius && !playerInAttackingRadius) PursutePlayer();
         if (playerInVisionRadius && playerInAttackingRadius) AttackPlayer();
 
-        // Update animations based on state
-        CheckBottomAnimation();
-        CheckTopAnimation();
+        // Update idle animation timer
+        if (!playerInVisionRadius && !playerInAttackingRadius)
+        {
+            idleAnimationTimer += Time.deltaTime;
+            if (idleAnimationTimer >= idleAnimationInterval)
+            {
+                idleAnimationTimer = 0f;
+                // Randomly select between Idle and Agonizing
+                if (Random.value > 0.5f)
+                {
+                    Play(ZombieAnimations.Idle, UPPERBODY, false, false);
+                    Play(ZombieAnimations.Idle, LOWERBODY, false, false);
+                }
+                else
+                {
+                    Play(ZombieAnimations.Agonizing, UPPERBODY, false, false);
+                    Play(ZombieAnimations.Agonizing, LOWERBODY, false, false);
+                }
+            }
+        }
+        else
+        {
+            idleAnimationTimer = 0f;
+        }
     }
 
     private void Guard()
@@ -79,120 +101,55 @@ public class Zombie1 : ZombieAnimationBrain
         }
 
         // Move towards the current walk point
-        transform.position = Vector3.MoveTowards(transform.position, walkPoints[currentZombiePosition].transform.position, Time.deltaTime * zombieSpeed);
+        zombieAgent.SetDestination(walkPoints[currentZombiePosition].transform.position);
 
-        // Smoothly rotate towards the walk point
-        Vector3 direction = (walkPoints[currentZombiePosition].transform.position - transform.position).normalized;
-        if (direction != Vector3.zero)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
-        }
+        // Play walking animation
+        Play(ZombieAnimations.Walk, UPPERBODY, false, false);
+        Play(ZombieAnimations.Walk, LOWERBODY, false, false);
     }
 
     private void PursutePlayer()
     {
         if (zombieAgent.SetDestination(playerBody.position))
         {
-            // Running animation handled in CheckMovementAnimation
+            Play(ZombieAnimations.Run, UPPERBODY, false, false);
+            Play(ZombieAnimations.Run, LOWERBODY, false, false);
         }
     }
 
     private void AttackPlayer()
     {
-        zombieAgent.SetDestination(transform.position);
+        zombieAgent.SetDestination(transform.position); // Stop the zombie in the attacking range
+        transform.LookAt(LookPoint); // Look at the player
 
-        // Smoothly look at the player
-        Vector3 direction = (LookPoint.position - transform.position).normalized;
-        if (direction != Vector3.zero)
+        if (!previouslyAttack)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed * 2); // Faster rotation when attacking
-        }
+            // Play attack animation
+            Play(ZombieAnimations.Attack, UPPERBODY, true, false);
+            Play(ZombieAnimations.Attack, LOWERBODY, true, false);
 
-        if (!previouslyAttack && !isAttacking)
-        {
-            isAttacking = true;
-            StartCoroutine(PerformAttack());
-        }
-    }
-
-    private IEnumerator PerformAttack()
-    {
-        // Play attack animation
-        previouslyAttack = true;
-
-        // Raycast to check if player is in front
-        RaycastHit hitInfo;
-        if (Physics.Raycast(AttackingRaycastArea.transform.position, AttackingRaycastArea.transform.forward, out hitInfo, attackingRadius))
-        {
-            PlayerScript playerBody = hitInfo.transform.GetComponent<PlayerScript>();
-            if (playerBody != null)
+            RaycastHit hitInfo;
+            if (Physics.Raycast(AttackingRaycastArea.transform.position, AttackingRaycastArea.transform.forward, out hitInfo, attackingRadius))
             {
-                playerBody.PlayerHitDamage(giveDamage);
+                PlayerScript playerBody = hitInfo.transform.GetComponent<PlayerScript>();
+
+                if (playerBody != null)
+                {
+                    playerBody.PlayerHitDamage(giveDamage);
+                }
             }
+
+            previouslyAttack = true;
+            Invoke(nameof(ActiveAttacking), timeBtwAttack);
         }
+    }
 
-        // Wait for attack cooldown
-        yield return new WaitForSeconds(timeBtwAttack);
-
+    private void ActiveAttacking()
+    {
         previouslyAttack = false;
-        isAttacking = false;
-    }
-
-    private void CheckTopAnimation()
-    {
-        CheckMovementAnimation(UPPERBODY);
-    }
-
-    private void CheckBottomAnimation()
-    {
-        CheckMovementAnimation(LOWERBODY);
-    }
-
-    private void CheckMovementAnimation(int layer)
-    {
-        if (isDead)
-        {
-            // Don't change animations if dead
-            return;
-        }
-
-        if (presentHealth <= 0)
-        {
-            // Randomly choose between two death animations
-            ZombieAnimations deathAnim = Random.Range(0, 2) == 0 ? ZombieAnimations.Dead1 : ZombieAnimations.Dead2;
-            Play(deathAnim, layer, true, true);
-        }
-        else if (isAttacking)
-        {
-            Play(ZombieAnimations.Attack, layer, true, false);
-        }
-        else if (playerInAttackingRadius)
-        {
-            // Idle stance when in attacking radius but not currently attacking
-            Play(ZombieAnimations.Idle, layer, false, false);
-        }
-        else if (playerInVisionRadius)
-        {
-            Play(ZombieAnimations.Run, layer, false, false);
-        }
-        else
-        {
-            Play(ZombieAnimations.Walk, layer, false, false);
-        }
-    }
-
-    void DefaultAnimation(int layer)
-    {
-        if (layer == UPPERBODY)
-        {
-            CheckTopAnimation();
-        }
-        else
-        {
-            CheckBottomAnimation();
-        }
+        // Unlock layers after attack is done
+        SetLocked(false, UPPERBODY);
+        SetLocked(false, LOWERBODY);
     }
 
     public void ZombieHitDamage(float takeDamage)
@@ -204,13 +161,48 @@ public class Zombie1 : ZombieAnimationBrain
         if (presentHealth <= 0)
         {
             isDead = true;
+            // Randomly select between Dead1 and Dead2
+            if (Random.value > 0.5f)
+            {
+                Play(ZombieAnimations.Dead1, UPPERBODY, true, true);
+                Play(ZombieAnimations.Dead1, LOWERBODY, true, true);
+            }
+            else
+            {
+                Play(ZombieAnimations.Dead2, UPPERBODY, true, true);
+                Play(ZombieAnimations.Dead2, LOWERBODY, true, true);
+            }
+
             ZombieDie();
         }
         else
         {
-            // Play hit reaction
-            Play(ZombieAnimations.HitReact, UPPERBODY, false, true, 0.1f);
+            // Randomly select between HitReact and HitReact2
+            ZombieAnimations hitReaction = Random.value > 0.5f ? ZombieAnimations.HitReact : ZombieAnimations.HitReact2;
+
+            Play(hitReaction, UPPERBODY, false, false);
+            Play(hitReaction, LOWERBODY, false, false);
+
+            // Interrupt current actions briefly
+            StopAllCoroutines();
+            StartCoroutine(InterruptMovementBriefly());
         }
+    }
+
+    private IEnumerator InterruptMovementBriefly()
+    {
+        // Store original speed
+        float originalSpeed = zombieAgent.speed;
+
+        // Stop movement briefly
+        zombieAgent.speed = 0;
+        zombieAgent.SetDestination(transform.position);
+
+        // Wait for a short duration (adjust as needed)
+        yield return new WaitForSeconds(0.5f);
+
+        // Restore original speed
+        zombieAgent.speed = originalSpeed;
     }
 
     private void ZombieDie()
@@ -252,6 +244,46 @@ public class Zombie1 : ZombieAnimationBrain
             {
                 Debug.Log("Kill reported successfully");
             }
+        }
+    }
+
+    private void CheckTopAnimation()
+    {
+        CheckMovementAnimation(UPPERBODY);
+    }
+
+    private void CheckBottomAnimation()
+    {
+        CheckMovementAnimation(LOWERBODY);
+    }
+
+    private void CheckMovementAnimation(int layer)
+    {
+        if (isDead) return;
+
+        if (!playerInVisionRadius && !playerInAttackingRadius)
+        {
+            // Idle animations are handled by the timer in Update
+        }
+        else if (playerInVisionRadius && !playerInAttackingRadius)
+        {
+            Play(ZombieAnimations.Run, layer, false, false);
+        }
+        else if (playerInVisionRadius && playerInAttackingRadius)
+        {
+            // Attack animation is handled in AttackPlayer method
+        }
+    }
+
+    void DefaultAnimation(int layer)
+    {
+        if (layer == UPPERBODY)
+        {
+            CheckTopAnimation();
+        }
+        else
+        {
+            CheckBottomAnimation();
         }
     }
 }
