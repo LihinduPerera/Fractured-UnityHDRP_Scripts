@@ -23,6 +23,7 @@ public class Zombie1 : ZombieAnimationBrain
     public GameObject[] walkPoints;
     int currentZombiePosition = 0;
     public float zombieSpeed;
+    public float rotationSpeed = 5f; // Added rotation speed parameter
     float walkingPointRadius = 2;
 
     [Header("Zombie Attacking Var")]
@@ -76,8 +77,17 @@ public class Zombie1 : ZombieAnimationBrain
                 currentZombiePosition = 0;
             }
         }
+
+        // Move towards the current walk point
         transform.position = Vector3.MoveTowards(transform.position, walkPoints[currentZombiePosition].transform.position, Time.deltaTime * zombieSpeed);
-        transform.LookAt(walkPoints[currentZombiePosition].transform.position);
+
+        // Smoothly rotate towards the walk point
+        Vector3 direction = (walkPoints[currentZombiePosition].transform.position - transform.position).normalized;
+        if (direction != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+        }
     }
 
     private void PursutePlayer()
@@ -91,7 +101,14 @@ public class Zombie1 : ZombieAnimationBrain
     private void AttackPlayer()
     {
         zombieAgent.SetDestination(transform.position);
-        transform.LookAt(LookPoint);
+
+        // Smoothly look at the player
+        Vector3 direction = (LookPoint.position - transform.position).normalized;
+        if (direction != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed * 2); // Faster rotation when attacking
+        }
 
         if (!previouslyAttack && !isAttacking)
         {
