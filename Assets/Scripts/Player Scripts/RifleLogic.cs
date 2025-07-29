@@ -25,6 +25,8 @@ public class RifleLogic : MonoBehaviour
     public GameObject woodEffect;
     public GameObject goreEffect;
 
+    public bool IsReloading => setReloading;
+
     private void Awake()
     {
         transform.SetParent(hand);
@@ -36,7 +38,15 @@ public class RifleLogic : MonoBehaviour
         if (setReloading)
             return;
 
-        if(presentAmunition <= 0)
+        // Manual reload with R key if not full and not already reloading
+        if (Input.GetKeyDown(KeyCode.R) && presentAmunition < maximumAmunition)
+        {
+            StartCoroutine(Reload());
+            return;
+        }
+
+        // Auto reload when ammo runs out
+        if (presentAmunition <= 0)
         {
             StartCoroutine(Reload());
             return;
@@ -116,11 +126,17 @@ public class RifleLogic : MonoBehaviour
         player.playerSprint = 0f;
         setReloading = true;
 
+        // Trigger reload animation on upper body only
+        player.Play(Animations.Reload, PlayerScript.UPPERBODY, true, true);
+
         yield return new WaitForSeconds(reloadingTime);
 
         presentAmunition = maximumAmunition;
         player.playerSpeed = 1.9f;
         player.playerSprint = 3f;
         setReloading = false;
+
+        // Unlock the upper body layer after reload is complete
+        player.SetLocked(false, PlayerScript.UPPERBODY);
     }
 }

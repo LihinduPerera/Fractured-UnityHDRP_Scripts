@@ -11,6 +11,7 @@ public class PlayerScript : AnimationBrain
     [Header("Player Health")]
     private float playerHealth = 120f;
     public float presentHealth;
+    private bool isTakingDamage = false;
 
     [Header("Player Script Cameras")]
     public Transform playerCamera; // Main camera transform
@@ -35,11 +36,10 @@ public class PlayerScript : AnimationBrain
 
     [Header("Camera Shake")]
     public SwitchCamera switchCamera;
+    public RifleLogic rifleLogic;
 
-    //private string currentAnimation = "";
-
-    private const int UPPERBODY = 0;
-    private const int LOWERBODY = 1;
+    public const int UPPERBODY = 0;
+    public const int LOWERBODY = 1;
 
     bool isSprinting;
     private Vector3 direction;
@@ -55,6 +55,8 @@ public class PlayerScript : AnimationBrain
 
     private void Update()
     {
+        if (isTakingDamage) return;
+
         onSurface = Physics.CheckSphere(surfaceCheck.position, surfaceDistance, surfaceMask);
 
         if (onSurface && velocity.y < 0)
@@ -180,7 +182,18 @@ public class PlayerScript : AnimationBrain
 
     public void PlayerHitDamage(float takeDamage)
     {
+        if (isTakingDamage) return;
+
         presentHealth -= takeDamage;
+
+        // Randomly choose between two hit reactions
+        Animations hitAnim = Random.Range(0, 2) == 0 ? Animations.HitReaction : Animations.HitReaction2;
+
+        // Play hit reaction on both layers
+        Play(hitAnim, UPPERBODY, true, true);
+        Play(hitAnim, LOWERBODY, true, true);
+
+        StartCoroutine(HandleHitReaction());
 
         if (presentHealth <= 0)
         {
@@ -188,21 +201,40 @@ public class PlayerScript : AnimationBrain
         }
     }
 
+    private IEnumerator HandleHitReaction()
+    {
+        isTakingDamage = true;
+        yield return new WaitForSeconds(0.5f); // Wait for hit animation to complete
+
+        // Unlock both layers
+        SetLocked(false, UPPERBODY);
+        SetLocked(false, LOWERBODY);
+
+        isTakingDamage = false;
+    }
+
     private void PlayerDie()
     {
+        // Play death animation on both layers
+        Play(Animations.Death, UPPERBODY, true, true);
+        Play(Animations.Death, LOWERBODY, true, true);
+
         Cursor.lockState = CursorLockMode.None;
         Object.Destroy(gameObject, 1.0f);
     }
 
     private void CheckTopAnimation()
     {
-        {
-            CheckMovementAnimation(UPPERBODY);
-        }
+        if (isTakingDamage) return;
+        if (rifleLogic != null && rifleLogic.IsReloading) return;
+
+        CheckMovementAnimation(UPPERBODY);
     }
 
     private void CheckBottomAnimation()
     {
+        if (isTakingDamage) return;
+
         CheckMovementAnimation(LOWERBODY);
     }
 
@@ -215,7 +247,6 @@ public class PlayerScript : AnimationBrain
         else if (Input.GetMouseButton(1) && Input.GetMouseButton(0) && direction.magnitude > 0.1f)
         {
             Play(Animations.WalkRifleFire, layer, false, false);
-            //if (switchCamera != null) switchCamera.TriggerShake();
         }
         else if (Input.GetMouseButton(1) && direction.magnitude > 0.1f)
         {
@@ -224,7 +255,6 @@ public class PlayerScript : AnimationBrain
         else if (Input.GetMouseButton(1) && Input.GetMouseButton(0))
         {
             Play(Animations.StandRifleFire, layer, false, false);
-            //if (switchCamera != null) switchCamera.TriggerShake();
         }
         else if (Input.GetMouseButton(1))
         {

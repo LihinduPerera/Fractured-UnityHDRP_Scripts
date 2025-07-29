@@ -21,6 +21,7 @@ public class Zombie2 : ZombieAnimationBrain
 
     [Header("Zombie Standing var")]
     public float zombieSpeed;
+    public float zombieRunSpeed; // New variable for run speed when chasing player
 
     [Header("Zombie Attacking Var")]
     public float timeBtwAttack;
@@ -47,6 +48,9 @@ public class Zombie2 : ZombieAnimationBrain
 
         zombieAgent = GetComponent<NavMeshAgent>();
         presentHealth = zombieHealth;
+
+        // Set initial speed
+        zombieAgent.speed = zombieSpeed;
     }
 
     private void Update()
@@ -56,8 +60,16 @@ public class Zombie2 : ZombieAnimationBrain
         playerInVisionRadius = Physics.CheckSphere(transform.position, visionRadius, playerLayer);
         playerInAttackingRadius = Physics.CheckSphere(transform.position, attackingRadius, playerLayer);
 
-        if (!playerInVisionRadius && !playerInAttackingRadius) Idle();
-        if (playerInVisionRadius && !playerInAttackingRadius) PursutePlayer();
+        if (!playerInVisionRadius && !playerInAttackingRadius)
+        {
+            Idle();
+            zombieAgent.speed = zombieSpeed; // Reset to normal speed
+        }
+        if (playerInVisionRadius && !playerInAttackingRadius)
+        {
+            PursutePlayer();
+            zombieAgent.speed = zombieRunSpeed; // Increase to run speed
+        }
         if (playerInVisionRadius && playerInAttackingRadius) AttackPlayer();
 
         // Update idle animation timer
