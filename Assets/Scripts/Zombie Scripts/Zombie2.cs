@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Networking;
 
 public class Zombie2 : ZombieAnimationBrain
 {
@@ -9,6 +10,7 @@ public class Zombie2 : ZombieAnimationBrain
     private float zombieHealth = 100f;
     private float presentHealth;
     public float giveDamage = 5f;
+    private bool isDead = false;
 
     [Header("Zombie Things")]
     public NavMeshAgent zombieAgent;
@@ -49,6 +51,8 @@ public class Zombie2 : ZombieAnimationBrain
 
     private void Update()
     {
+        if (isDead) return;
+
         playerInVisionRadius = Physics.CheckSphere(transform.position, visionRadius, playerLayer);
         playerInAttackingRadius = Physics.CheckSphere(transform.position, attackingRadius, playerLayer);
 
@@ -134,10 +138,13 @@ public class Zombie2 : ZombieAnimationBrain
 
     public void ZombieHitDamage(float takeDamage)
     {
+        if (isDead) return;
+
         presentHealth -= takeDamage;
 
         if (presentHealth <= 0)
         {
+            isDead = true;
             // Randomly select between Dead1 and Dead2
             if (Random.value > 0.5f)
             {
@@ -185,12 +192,43 @@ public class Zombie2 : ZombieAnimationBrain
     private void ZombieDie()
     {
         zombieAgent.SetDestination(transform.position);
+        zombieAgent.isStopped = true;
         zombieSpeed = 0f;
         attackingRadius = 0f;
         visionRadius = 0f;
         playerInAttackingRadius = false;
         playerInVisionRadius = false;
+
+        // Disable collider to prevent further hits
+        Collider collider = GetComponent<Collider>();
+        if (collider != null)
+        {
+            collider.enabled = false;
+        }
+
+        // Notify server about the kill (only once)
+        StartCoroutine(ReportKillToServer("Zombie2"));
+
         Object.Destroy(gameObject, 5.0f);
+    }
+
+    private IEnumerator ReportKillToServer(string zombieType)
+    {
+        string url = "http://localhost:8080/api/zombies/kill?zombieType=" + zombieType + "&weaponUsed=rifle";
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(url, ""))
+        {
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Error reporting kill: " + webRequest.error);
+            }
+            else
+            {
+                Debug.Log("Kill reported successfully");
+            }
+        }
     }
 
     private void CheckTopAnimation()
@@ -205,6 +243,8 @@ public class Zombie2 : ZombieAnimationBrain
 
     private void CheckMovementAnimation(int layer)
     {
+        if (isDead) return;
+
         if (!playerInVisionRadius && !playerInAttackingRadius)
         {
             // Idle animations are handled by the timer in Update
