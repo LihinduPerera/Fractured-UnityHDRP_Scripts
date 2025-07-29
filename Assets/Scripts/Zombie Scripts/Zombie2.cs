@@ -21,13 +21,15 @@ public class Zombie2 : ZombieAnimationBrain
 
     [Header("Zombie Standing var")]
     public float zombieSpeed;
-    public float zombieRunSpeed; // New variable for run speed when chasing player
+    public float zombieRunSpeed;
+    private float idleAnimationTimer = 0f;
+    private float idleAnimationInterval = 5f;
 
     [Header("Zombie Attacking Var")]
-    public float timeBtwAttack;
-    bool previouslyAttack;
-    private float idleAnimationTimer = 0f;
-    private float idleAnimationInterval = 5f; // Time between idle animation switches
+    public float timeBtwAttack = 1.5f;
+    public float attackAnimationLength = 1f;
+    private float lastAttackTime = 0f;
+    private bool isAttacking = false;
 
     [Header("Zombie Animations")]
     public Animator animator;
@@ -45,11 +47,8 @@ public class Zombie2 : ZombieAnimationBrain
     {
         Initialize(GetComponent<Animator>().layerCount, ZombieAnimations.Idle, GetComponent<Animator>(), DefaultAnimation);
         animator = GetComponent<Animator>();
-
         zombieAgent = GetComponent<NavMeshAgent>();
         presentHealth = zombieHealth;
-
-        // Set initial speed
         zombieAgent.speed = zombieSpeed;
     }
 
@@ -63,23 +62,24 @@ public class Zombie2 : ZombieAnimationBrain
         if (!playerInVisionRadius && !playerInAttackingRadius)
         {
             Idle();
-            zombieAgent.speed = zombieSpeed; // Reset to normal speed
+            zombieAgent.speed = zombieSpeed;
         }
         if (playerInVisionRadius && !playerInAttackingRadius)
         {
             PursutePlayer();
-            zombieAgent.speed = zombieRunSpeed; // Increase to run speed
+            zombieAgent.speed = zombieRunSpeed;
         }
-        if (playerInVisionRadius && playerInAttackingRadius) AttackPlayer();
+        if (playerInVisionRadius && playerInAttackingRadius)
+        {
+            AttackPlayer();
+        }
 
-        // Update idle animation timer
         if (!playerInVisionRadius && !playerInAttackingRadius)
         {
             idleAnimationTimer += Time.deltaTime;
             if (idleAnimationTimer >= idleAnimationInterval)
             {
                 idleAnimationTimer = 0f;
-                // Randomly select between Idle and Agonizing
                 if (Random.value > 0.5f)
                 {
                     Play(ZombieAnimations.Idle, UPPERBODY, false, false);
@@ -101,7 +101,6 @@ public class Zombie2 : ZombieAnimationBrain
     private void Idle()
     {
         zombieAgent.SetDestination(transform.position);
-        // Idle animations are handled in the Update timer
     }
 
     private void PursutePlayer()
@@ -115,35 +114,48 @@ public class Zombie2 : ZombieAnimationBrain
 
     private void AttackPlayer()
     {
-        zombieAgent.SetDestination(transform.position); //stop the zombie in the attacking range
-        transform.LookAt(LookPoint); // Look at the player
+        zombieAgent.SetDestination(transform.position);
+        transform.LookAt(LookPoint);
 
-        if (!previouslyAttack)
+        if (!isAttacking && Time.time > lastAttackTime + timeBtwAttack)
         {
+            isAttacking = true;
+            lastAttackTime = Time.time;
+
             // Play attack animation
             Play(ZombieAnimations.Attack, UPPERBODY, true, false);
             Play(ZombieAnimations.Attack, LOWERBODY, true, false);
 
-            RaycastHit hitInfo;
-            if (Physics.Raycast(AttackingRaycastArea.transform.position, AttackingRaycastArea.transform.forward, out hitInfo, attackingRadius))
-            {
-                PlayerScript playerBody = hitInfo.transform.GetComponent<PlayerScript>();
+            // Deal damage at the peak of the attack animation
+            Invoke(nameof(DealDamage), attackAnimationLength * 0.5f);
 
-                if (playerBody != null)
-                {
-                    playerBody.PlayerHitDamage(giveDamage);
-                }
-            }
-
-            previouslyAttack = true;
-            Invoke(nameof(ActiveAttacking), timeBtwAttack);
+            // Reset attacking state after animation completes
+            Invoke(nameof(ResetAttack), attackAnimationLength);
+        }
+        else if (!isAttacking)
+        {
+            // Play idle animation while waiting to attack again
+            Play(ZombieAnimations.Idle, UPPERBODY, false, false);
+            Play(ZombieAnimations.Idle, LOWERBODY, false, false);
         }
     }
 
-    private void ActiveAttacking()
+    private void DealDamage()
     {
-        previouslyAttack = false;
-        // Unlock layers after attack is done
+        RaycastHit hitInfo;
+        if (Physics.Raycast(AttackingRaycastArea.transform.position, AttackingRaycastArea.transform.forward, out hitInfo, attackingRadius))
+        {
+            PlayerScript playerBody = hitInfo.transform.GetComponent<PlayerScript>();
+            if (playerBody != null)
+            {
+                playerBody.PlayerHitDamage(giveDamage);
+            }
+        }
+    }
+
+    private void ResetAttack()
+    {
+        isAttacking = false;
         SetLocked(false, UPPERBODY);
         SetLocked(false, LOWERBODY);
     }
@@ -157,7 +169,6 @@ public class Zombie2 : ZombieAnimationBrain
         if (presentHealth <= 0)
         {
             isDead = true;
-            // Randomly select between Dead1 and Dead2
             if (Random.value > 0.5f)
             {
                 Play(ZombieAnimations.Dead1, UPPERBODY, true, true);
@@ -173,13 +184,10 @@ public class Zombie2 : ZombieAnimationBrain
         }
         else
         {
-            // Randomly select between HitReact and HitReact2
             ZombieAnimations hitReaction = Random.value > 0.5f ? ZombieAnimations.HitReact : ZombieAnimations.HitReact2;
-
             Play(hitReaction, UPPERBODY, false, false);
             Play(hitReaction, LOWERBODY, false, false);
 
-            // Interrupt current actions briefly
             StopAllCoroutines();
             StartCoroutine(InterruptMovementBriefly());
         }
@@ -187,17 +195,10 @@ public class Zombie2 : ZombieAnimationBrain
 
     private IEnumerator InterruptMovementBriefly()
     {
-        // Store original speed
         float originalSpeed = zombieAgent.speed;
-
-        // Stop movement briefly
         zombieAgent.speed = 0;
         zombieAgent.SetDestination(transform.position);
-
-        // Wait for a short duration (adjust as needed)
         yield return new WaitForSeconds(0.5f);
-
-        // Restore original speed
         zombieAgent.speed = originalSpeed;
     }
 
@@ -211,16 +212,13 @@ public class Zombie2 : ZombieAnimationBrain
         playerInAttackingRadius = false;
         playerInVisionRadius = false;
 
-        // Disable collider to prevent further hits
         Collider collider = GetComponent<Collider>();
         if (collider != null)
         {
             collider.enabled = false;
         }
 
-        // Notify server about the kill (only once)
         StartCoroutine(ReportKillToServer("Zombie2"));
-
         Object.Destroy(gameObject, 5.0f);
     }
 
@@ -259,15 +257,15 @@ public class Zombie2 : ZombieAnimationBrain
 
         if (!playerInVisionRadius && !playerInAttackingRadius)
         {
-            // Idle animations are handled by the timer in Update
+            // Idle animations handled by timer
         }
         else if (playerInVisionRadius && !playerInAttackingRadius)
         {
             Play(ZombieAnimations.Run, layer, false, false);
         }
-        else if (playerInVisionRadius && playerInAttackingRadius)
+        else if (playerInVisionRadius && playerInAttackingRadius && !isAttacking)
         {
-            // Attack animation is handled in AttackPlayer method
+            Play(ZombieAnimations.Idle, layer, false, false);
         }
     }
 

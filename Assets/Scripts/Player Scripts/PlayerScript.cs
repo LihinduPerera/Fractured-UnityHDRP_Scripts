@@ -12,6 +12,8 @@ public class PlayerScript : AnimationBrain
     private float playerHealth = 120f;
     public float presentHealth;
     private bool isTakingDamage = false;
+    private float lastHitTime = 0f;
+    public float hitCooldown = 1f; // Prevent rapid hits
 
     [Header("Player Script Cameras")]
     public Transform playerCamera; // Main camera transform
@@ -182,8 +184,9 @@ public class PlayerScript : AnimationBrain
 
     public void PlayerHitDamage(float takeDamage)
     {
-        if (isTakingDamage) return;
+        if (isTakingDamage || Time.time < lastHitTime + hitCooldown) return;
 
+        lastHitTime = Time.time;
         presentHealth -= takeDamage;
 
         // Randomly choose between two hit reactions
