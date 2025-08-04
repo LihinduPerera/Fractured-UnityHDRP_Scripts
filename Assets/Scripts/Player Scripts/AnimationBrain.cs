@@ -73,7 +73,21 @@ public class AnimationBrain : MonoBehaviour
     //    animator.CrossFade(animations[(int)currentAnimation[layer]], crossfade, layer);
     //}
 
-    public void Play(Animations animation, int layer, bool lockLayer, bool bypassLock, float crossfade = 0.2f)
+    public float GetAnimationLength(Animations animation)
+    {
+        // Get the animation clip length from the animator
+        RuntimeAnimatorController ac = animator.runtimeAnimatorController;
+        for (int i = 0; i < ac.animationClips.Length; i++)
+        {
+            if (ac.animationClips[i].name == animation.ToString()) //When do this, you must change the motion name to "Reload"(Ex: "mixamo.com" to "Reload")
+            {
+                return ac.animationClips[i].length;
+            }
+        }
+        return 1.3f; // Default fallback value if animation not found
+    }
+
+    public void Play(Animations animation, int layer, bool lockLayer, bool bypassLock, float crossfade = 0.1f)
     {
         if (animation == Animations.None)
         {
@@ -91,7 +105,7 @@ public class AnimationBrain : MonoBehaviour
         bool isIdle = currentAnimation[layer] == Animations.Idle1 || currentAnimation[layer] == Animations.Idle2 || currentAnimation[layer] == Animations.Idle3;
         bool isQuickTransition = animation == Animations.Walk || animation == Animations.Run || animation == Animations.Jump;
 
-        float actualCrossfade = (isIdle) ? 0.01f : crossfade;
+        float actualCrossfade = (isIdle) ? 0.001f : crossfade;
 
         currentAnimation[layer] = animation;
         animator.CrossFade(animations[(int)currentAnimation[layer]], actualCrossfade, layer);

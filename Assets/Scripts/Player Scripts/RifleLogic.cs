@@ -8,16 +8,16 @@ public class RifleLogic : MonoBehaviour
     public Camera cam;
     public float gunDamage = 10f;
     public float shootRange = 100f;
-    public float fireCharge = 15f;
+    [Tooltip("Rounds per second")]
+    public float fireRate = 15f; // Changed from fireCharge to fireRate for clarity
     private float nextTimeToShoot = 0f;
     public PlayerScript player;
     public Transform hand;
 
-    [Header("Rifle Amunition and shooting")]
-    private int maximumAmunition = 32;
-    public int mag = 10;
-    private int presentAmunition;
-    public float reloadingTime = 1.3f;
+    [Header("Rifle Ammunition")]
+    public int magazineSize = 32; // Renamed from maximumAmunition for clarity
+    public int totalMagazines = 10; // Renamed from mag for clarity
+    private int currentAmmo;
     private bool setReloading = false;
 
     [Header("Rifle Effects")]
@@ -26,11 +26,13 @@ public class RifleLogic : MonoBehaviour
     public GameObject goreEffect;
 
     public bool IsReloading => setReloading;
+    public int CurrentAmmo => currentAmmo;
+    public int TotalMagazines => totalMagazines;
 
     private void Awake()
     {
         transform.SetParent(hand);
-        presentAmunition = maximumAmunition;
+        currentAmmo = magazineSize;
     }
 
     private void Update()
@@ -39,14 +41,14 @@ public class RifleLogic : MonoBehaviour
             return;
 
         // Manual reload with R key if not full and not already reloading
-        if (Input.GetKeyDown(KeyCode.R) && presentAmunition < maximumAmunition)
+        if (Input.GetKeyDown(KeyCode.R) && currentAmmo < magazineSize)
         {
             StartCoroutine(Reload());
             return;
         }
 
         // Auto reload when ammo runs out
-        if (presentAmunition <= 0)
+        if (currentAmmo <= 0)
         {
             StartCoroutine(Reload());
             return;
@@ -54,24 +56,24 @@ public class RifleLogic : MonoBehaviour
 
         if (Input.GetMouseButton(1) && Input.GetMouseButton(0) && Time.time >= nextTimeToShoot)
         {
-            nextTimeToShoot = Time.time + 1f / fireCharge;
+            nextTimeToShoot = Time.time + 1f / fireRate; // Calculate delay based on fireRate
             Shoot();
         }
     }
 
     private void Shoot()
     {
-        if (mag == 0)
+        if (totalMagazines <= 0 && currentAmmo <= 0)
         {
-            //ammo out text
+            // Optionally play empty click sound here
             return;
         }
 
-        presentAmunition--;
+        currentAmmo--;
 
-        if (presentAmunition == 0)
+        if (currentAmmo <= 0)
         {
-            mag--;
+            totalMagazines--;
         }
 
         muzzleSpark.Play();
@@ -126,17 +128,26 @@ public class RifleLogic : MonoBehaviour
         player.playerSprint = 0f;
         setReloading = true;
 
+        // Get the length of the reload animation
+        float reloadTime = player.GetAnimationLength(Animations.Reload);
+
         // Trigger reload animation on upper body only
         player.Play(Animations.Reload, PlayerScript.UPPERBODY, true, true);
 
-        yield return new WaitForSeconds(reloadingTime);
+        yield return new WaitForSeconds(reloadTime);
 
-        presentAmunition = maximumAmunition;
+        currentAmmo = magazineSize;
         player.playerSpeed = 1.9f;
         player.playerSprint = 3f;
         setReloading = false;
 
         // Unlock the upper body layer after reload is complete
         player.SetLocked(false, PlayerScript.UPPERBODY);
+    }
+
+    // Method to add ammo (for pickups)
+    public void AddAmmo(int amount)
+    {
+        totalMagazines += amount;
     }
 }
