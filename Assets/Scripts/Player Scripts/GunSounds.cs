@@ -10,6 +10,9 @@ public class GunSounds : MonoBehaviour
     public AudioClip[] fireSounds;
     public AudioClip[] reloadSounds;
 
+    [Header("Volume Settings")]
+    [Range(0f, 1f)] public float gunFireVolume = 1.0f; // Default: Max
+
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
@@ -23,6 +26,6 @@ public class GunSounds : MonoBehaviour
     private void Fire()
     {
         AudioClip clip = GetRandomFireSound();
-        audioSource.PlayOneShot(clip);
+        audioSource.PlayOneShot(clip, gunFireVolume);
     }
 }

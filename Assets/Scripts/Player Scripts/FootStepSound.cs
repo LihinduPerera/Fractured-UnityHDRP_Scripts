@@ -9,6 +9,9 @@ public class FootStepSound : MonoBehaviour
     [Header("FootSteps Sources")]
     public AudioClip[] footStepSound;
 
+    [Header("Volume Settings")]
+    [Range(0f, 1f)] public float footStepVolume = 1.0f; // Default: Max
+
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
@@ -22,6 +25,6 @@ public class FootStepSound : MonoBehaviour
     private void Step()
     {
         AudioClip clip = GetRandomFootStep();
-        audioSource.PlayOneShot(clip);
+        audioSource.PlayOneShot(clip, footStepVolume);
     }
 }
