@@ -124,8 +124,8 @@ public class RifleLogic : MonoBehaviour
 
     IEnumerator Reload()
     {
-        player.playerSpeed = 0f;
-        player.playerSprint = 0f;
+        //player.playerSpeed = 0f;
+        //player.playerSprint = 0f;
         setReloading = true;
 
         // Get the length of the reload animation
@@ -142,7 +142,12 @@ public class RifleLogic : MonoBehaviour
         setReloading = false;
 
         // Unlock the upper body layer after reload is complete
+        
         player.SetLocked(false, PlayerScript.UPPERBODY);
+
+        player.Play(Animations.Walk, PlayerScript.UPPERBODY, false, false); //To reset the animation controller to default in Reload state
+        player.Play(Animations.Walk, PlayerScript.LOWERBODY, false, false); //To reset the animation controller to default in Reload state
+
     }
 
     // Method to add ammo (for pickups)

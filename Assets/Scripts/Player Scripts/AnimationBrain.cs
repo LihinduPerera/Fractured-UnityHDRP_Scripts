@@ -103,9 +103,9 @@ public class AnimationBrain : MonoBehaviour
 
         // If current animation is an Idle and we're switching to Walk, Run, or Jump, shorten the crossfade
         bool isIdle = currentAnimation[layer] == Animations.Idle1 || currentAnimation[layer] == Animations.Idle2 || currentAnimation[layer] == Animations.Idle3;
-        bool isQuickTransition = animation == Animations.Walk || animation == Animations.Run || animation == Animations.Jump;
+        //bool isQuickTransition = animation == Animations.Walk || animation == Animations.Run || animation == Animations.Jump;
 
-        float actualCrossfade = (isIdle) ? 0.001f : crossfade;
+        float actualCrossfade = (isIdle) ? 0.01f : crossfade;
 
         currentAnimation[layer] = animation;
         animator.CrossFade(animations[(int)currentAnimation[layer]], actualCrossfade, layer);
