@@ -247,6 +247,10 @@ public class PlayerScript : AnimationBrain
         {
             Play(Animations.Jump, layer, false, false);
         }
+        //if (Input.GetKey(KeyCode.Space))
+        //{
+        //    Play(Animations.Jump, layer, false, false);
+        //}
         else if (Input.GetMouseButton(1) && Input.GetMouseButton(0) && direction.magnitude > 0.1f)
         {
             Play(Animations.WalkRifleFire, layer, false, false);

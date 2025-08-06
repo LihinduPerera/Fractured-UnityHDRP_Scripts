@@ -87,7 +87,7 @@ public class AnimationBrain : MonoBehaviour
         return 1.3f; // Default fallback value if animation not found
     }
 
-    public void Play(Animations animation, int layer, bool lockLayer, bool bypassLock, float crossfade = 0.1f)
+    public void Play(Animations animation, int layer, bool lockLayer, bool bypassLock, float crossfade = 0.2f)
     {
         if (animation == Animations.None)
         {
