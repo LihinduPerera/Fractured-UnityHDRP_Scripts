@@ -24,7 +24,7 @@ public class Zombie1 : ZombieAnimationBrain
     int currentZombiePosition = 0;
     public float zombieSpeed;
     public float zombieRunSpeed;
-    public float rotationSpeed = 5f;
+    public float rotationSpeed = 10f; // Increased rotation speed
     float walkingPointRadius = 2;
     private float idleAnimationTimer = 0f;
     private float idleAnimationInterval = 5f;
@@ -34,6 +34,8 @@ public class Zombie1 : ZombieAnimationBrain
     public float attackAnimationLength = 1f;
     private float lastAttackTime = 0f;
     private bool isAttacking = false;
+    private float pathUpdateDelay = 0.25f; // Added path update delay
+    private float lastPathUpdateTime = 0f;
 
     [Header("Zombie Animations")]
     public Animator animator;
@@ -54,6 +56,8 @@ public class Zombie1 : ZombieAnimationBrain
         zombieAgent = GetComponent<NavMeshAgent>();
         presentHealth = zombieHealth;
         zombieAgent.speed = zombieSpeed;
+        zombieAgent.angularSpeed = 360f; // Increased angular speed
+        zombieAgent.acceleration = 20f; // Increased acceleration
     }
 
     private void Update()
@@ -120,17 +124,40 @@ public class Zombie1 : ZombieAnimationBrain
 
     private void PursutePlayer()
     {
-        if (zombieAgent.SetDestination(playerBody.position))
+        if (Time.time > lastPathUpdateTime + pathUpdateDelay)
         {
-            Play(ZombieAnimations.Run, UPPERBODY, false, false);
-            Play(ZombieAnimations.Run, LOWERBODY, false, false);
+            lastPathUpdateTime = Time.time;
+            if (zombieAgent.isOnNavMesh)
+            {
+                zombieAgent.SetDestination(playerBody.position);
+            }
         }
+
+        // Smooth rotation towards player
+        Vector3 direction = (playerBody.position - transform.position).normalized;
+        direction.y = 0; // Keep the rotation only on Y axis
+        if (direction != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
+
+        Play(ZombieAnimations.Run, UPPERBODY, false, false);
+        Play(ZombieAnimations.Run, LOWERBODY, false, false);
     }
 
     private void AttackPlayer()
     {
         zombieAgent.SetDestination(transform.position);
-        transform.LookAt(LookPoint);
+
+        // Immediate and smooth rotation towards player
+        Vector3 direction = (playerBody.position - transform.position).normalized;
+        direction.y = 0;
+        if (direction != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * 2 * Time.deltaTime);
+        }
 
         if (!isAttacking && Time.time > lastAttackTime + timeBtwAttack)
         {
