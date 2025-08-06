@@ -212,9 +212,38 @@ public class Zombie2 : ZombieAnimationBrain
             Play(hitReaction, LOWERBODY, false, false);
 
             StopAllCoroutines();
-            StartCoroutine(InterruptMovementBriefly());
+            //StartCoroutine(InterruptMovementBriefly());
+            StartCoroutine(HitReactRoutine(hitReaction));
         }
     }
+
+    private IEnumerator HitReactRoutine(ZombieAnimations hitReaction)
+    {
+        // Stop movement
+        zombieAgent.isStopped = true;
+
+        // Lock animation layers
+        SetLocked(true, UPPERBODY);
+        SetLocked(true, LOWERBODY);
+
+        // Play hit reaction
+        Play(hitReaction, UPPERBODY, true, true);
+        Play(hitReaction, LOWERBODY, true, true);
+
+        // Wait for the animation to play
+        yield return new WaitForSeconds(0.5f); // You can tweak this depending on animation length
+
+        // Unlock animation layers
+        SetLocked(false, UPPERBODY);
+        SetLocked(false, LOWERBODY);
+
+        // Resume movement if still alive
+        if (!isDead)
+        {
+            zombieAgent.isStopped = false;
+        }
+    }
+
 
     private IEnumerator InterruptMovementBriefly()
     {
