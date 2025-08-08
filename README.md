@@ -4,6 +4,15 @@
 
 ---
 
+## 📸 Screenshots
+
+<p align="center">
+  <img src="Screenshots/ss_1.png" width="32%"/> <img src="Screenshots/ss_2.png" width="32%"/> <img src="Screenshots/ss_3.png" width="32%"/><br><br>
+  <img src="Screenshots/ss_4.png" width="32%"/> <img src="Screenshots/ss_5.png" width="32%"/>
+</p>
+
+---
+
 ## 🌌 Features
 
 - 🎥 **Cinematic Cutscenes**  
@@ -17,15 +26,6 @@
 
 - 🧱 **Clean Architecture**  
   Codebase structured for **modularity and scalability**, with decoupled systems and maintainable logic.
-
----
-
-## 📸 Screenshots
-
-<p align="center">
-  <img src="Screenshots/ss_1.png" width="32%"/> <img src="Screenshots/ss_2.png" width="32%"/> <img src="Screenshots/ss_3.png" width="32%"/><br><br>
-  <img src="Screenshots/ss_4.png" width="32%"/> <img src="Screenshots/ss_5.png" width="32%"/>
-</p>
 
 ---
 
